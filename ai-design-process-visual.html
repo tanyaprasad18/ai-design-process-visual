@@ -16,7 +16,7 @@
       .legend { align-items:center; display:flex; flex-wrap:wrap; gap:9px; margin-bottom:30px; }
       .legend-label { color:var(--muted); font-size:11px; font-weight:700; letter-spacing:.1em; margin-right:4px; text-transform:uppercase; }
       .pill { border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; padding:7px 10px; }
-      .bob { color:#0f62fe; }.copilot { color:#6f4db6; }.figma { color:#d9485f; }.ibm { color:#008c95; }
+      .bob { color:#0f62fe; }.figma { color:#d9485f; }.skill-label { color:#008c95; }
       .journey { display:grid; gap:12px; grid-template-columns:repeat(5,minmax(0,1fr)); position:relative; }
       .journey::before { background:var(--line); content:""; height:2px; left:8%; position:absolute; right:8%; top:34px; z-index:0; }
       .stage { --accent:#0f62fe; background:#fff; border:1px solid var(--line); box-shadow:0 10px 24px rgba(27,52,84,.06); display:flex; flex-direction:column; min-height:690px; padding:18px; position:relative; z-index:1; }
@@ -76,10 +76,8 @@
       <div class="legend" aria-label="Tools used">
         <span class="legend-label">Tools in play</span>
         <span class="pill bob">Bob skills: Design Buddy, Helios, HDS, Experience Assurance</span>
-        <span class="pill copilot">Copilot</span>
         <span class="pill figma">Figma Make</span>
-        <span class="pill ibm">IBM PPT</span>
-        <span class="pill ibm">Experience Assurance</span>
+        <span class="pill skill-label">Bob skill: Experience Assurance</span>
       </div>
 
       <section class="journey" aria-label="Four stages of the design process">
@@ -88,15 +86,15 @@
           <p class="stage-label">Discovery</p>
           <h2>Find the signal</h2>
           <p class="summary">Build a shared understanding of customer context before the team commits to a problem.</p>
-          <div class="tool-row"><span class="tool">Bob</span><span class="tool skill">Bob skill: Design Buddy</span><span class="tool">Copilot</span><span class="tool">IBM PPT</span></div>
+          <div class="tool-row"><span class="tool">Bob</span><span class="tool skill">Bob skill: Design Buddy</span></div>
           <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Call notes</span><span>Transcripts</span><span>Product signals</span><span>Existing documents</span></div></div>
           <p class="use-label">AI helps you</p>
           <ul>
             <li><span class="action-text">Draft early customer-call questionnaires.<span class="capability">Draft</span></span><span class="action-tool">Bob</span></li>
             <li><span class="action-text">Understand product signals.<span class="capability">Analyze</span></span><span class="action-tool">Bob</span></li>
             <li><span class="action-text">Turn customer calls into insights with transcripts.<span class="capability">Synthesize</span></span><span class="action-tool">Bob skill: Design Buddy</span></li>
-            <li><span class="action-text">Create a presentation of findings.<span class="capability">Present</span></span><span class="action-tool">IBM PPT</span></li>
-            <li><span class="action-text">Analyze broad documents and form an initial synthesis.<span class="capability">Analyze</span></span><span class="action-tool">Copilot</span></li>
+            <li><span class="action-text">Create a presentation-ready summary of findings.<span class="capability">Present</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Analyze broad documents and form an initial synthesis.<span class="capability">Analyze</span></span><span class="action-tool">Bob</span></li>
           </ul>
           <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Summarize these five calls into recurring pain points, with supporting quotes.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Designer validates:</strong> the problem framing, evidence quality, and which signals matter.</p></div><div class="output"><small>DELIVERABLE</small>One-page problem frame with customer evidence</div></div>
         </article>
@@ -123,13 +121,13 @@
           <p class="stage-label">Define</p>
           <h2>Turn insight into inputs</h2>
           <p class="summary">Connect validated customer evidence to product requirements and the work design needs to do next.</p>
-          <div class="tool-row"><span class="tool">Bob</span><span class="tool">Copilot</span></div>
+          <div class="tool-row"><span class="tool">Bob</span></div>
           <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Research synthesis</span><span>PRD or RFC</span><span>Customer evidence</span><span>Constraints</span></div></div>
           <p class="use-label">AI helps you</p>
           <ul>
             <li><span class="action-text">Translate insights into inputs for the PRD.<span class="capability">Translate</span></span><span class="action-tool">Bob</span></li>
-            <li><span class="action-text">Translate a PRD or RFC into actionable design inputs.<span class="capability">Translate</span></span><span class="action-tool">Bob + Copilot</span></li>
-            <li><span class="action-text">Expose open questions and dependencies before design work begins.<span class="capability">Analyze</span></span><span class="action-tool">Bob + Copilot</span></li>
+            <li><span class="action-text">Translate a PRD or RFC into actionable design inputs.<span class="capability">Translate</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Expose open questions and dependencies before design work begins.<span class="capability">Analyze</span></span><span class="action-tool">Bob</span></li>
           </ul>
           <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Turn this PRD into primary flows, design tasks, assumptions, and open questions.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Team validates:</strong> scope, priority, dependencies, and the design direction.</p></div><div class="output"><small>DELIVERABLE</small>Annotated design brief and action plan</div></div>
         </article>

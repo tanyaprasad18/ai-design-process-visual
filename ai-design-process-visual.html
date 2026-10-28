@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI in the Design Process</title>
+    <style>
+      :root { --ink:#17243a; --muted:#607087; --paper:#f5f8fc; --line:#d7e0ec; --blue:#0f62fe; }
+      * { box-sizing:border-box; }
+      body { background:var(--paper); color:var(--ink); font-family:Arial, Helvetica, sans-serif; margin:0; }
+      .page { margin:0 auto; max-width:1440px; padding:56px clamp(22px,6vw,88px) 72px; }
+      .eyebrow { color:var(--blue); font-size:12px; font-weight:700; letter-spacing:.13em; margin:0 0 15px; text-transform:uppercase; }
+      h1 { font-size:clamp(38px,5vw,68px); letter-spacing:-.055em; line-height:.97; margin:0; max-width:800px; }
+      h1 span { color:var(--blue); font-family:Georgia, serif; font-style:italic; font-weight:400; }
+      .intro { color:var(--muted); font-size:18px; line-height:1.55; margin:25px 0 42px; max-width:690px; }
+      .legend { align-items:center; display:flex; flex-wrap:wrap; gap:9px; margin-bottom:30px; }
+      .legend-label { color:var(--muted); font-size:11px; font-weight:700; letter-spacing:.1em; margin-right:4px; text-transform:uppercase; }
+      .pill { border:1px solid currentColor; border-radius:999px; font-size:12px; font-weight:700; padding:7px 10px; }
+      .bob { color:#0f62fe; }.copilot { color:#6f4db6; }.figma { color:#d9485f; }.ibm { color:#008c95; }
+      .journey { display:grid; gap:12px; grid-template-columns:repeat(5,minmax(0,1fr)); position:relative; }
+      .journey::before { background:var(--line); content:""; height:2px; left:8%; position:absolute; right:8%; top:34px; z-index:0; }
+      .stage { --accent:#0f62fe; background:#fff; border:1px solid var(--line); box-shadow:0 10px 24px rgba(27,52,84,.06); display:flex; flex-direction:column; min-height:690px; padding:18px; position:relative; z-index:1; }
+      .stage.research { --accent:#6f4db6; }.stage.define { --accent:#008c95; }.stage.design { --accent:#d9485f; }.stage.testing { --accent:#317f80; }
+      .stage-number { align-items:center; background:var(--accent); border-radius:50%; color:#fff; display:flex; font-size:13px; font-weight:700; height:26px; justify-content:center; margin-bottom:22px; width:26px; }
+      .stage-label { color:var(--accent); font-size:11px; font-weight:700; letter-spacing:.12em; margin:0 0 8px; text-transform:uppercase; }
+      h2 { font-size:27px; letter-spacing:-.045em; line-height:1; margin:0 0 13px; }
+      .summary { color:var(--muted); font-size:14px; line-height:1.45; margin:0 0 19px; min-height:61px; }
+      .tool-row { display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0 0 14px; }
+      .tool { background:color-mix(in srgb, var(--accent) 10%, white); color:var(--accent); font-size:11px; font-weight:700; padding:6px 8px; }
+      .tool.skill { align-items:center; display:inline-flex; gap:4px; }
+      .tool.skill::before { content:"✦"; font-size:10px; }
+      .input-block { border-top:1px solid var(--line); margin:0; padding-top:14px; }
+      .stage-footer { display:flex; flex-direction:column; margin-top:auto; }
+      .prompt-block { border-top:1px solid var(--line); margin-top:0; min-height:136px; padding-top:14px; }
+      .review-block { border-top:1px solid var(--line); margin-top:17px; min-height:67px; padding-top:14px; }
+      .section-label { color:var(--muted); font-size:9px; font-weight:700; letter-spacing:.11em; margin:0 0 7px; text-transform:uppercase; }
+      .input-tags { display:flex; flex-wrap:wrap; gap:5px; }
+      .input-tags span { background:#f2f5f9; color:#4d5c70; font-size:10px; padding:5px 6px; }
+      .capability { color:var(--accent); font-size:9px; font-weight:700; letter-spacing:.08em; margin-left:5px; text-transform:uppercase; }
+      .prompt-block { background:color-mix(in srgb, var(--accent) 6%, white); border-left:3px solid var(--accent); padding:11px 11px 11px 13px; }
+      .prompt-block p { color:#405069; font-family:Georgia, serif; font-size:13px; font-style:italic; line-height:1.38; margin:0; }
+      .review-block { display:flex; gap:8px; }
+      .review-mark { align-items:center; background:var(--accent); border-radius:50%; color:#fff; display:flex; flex:0 0 auto; font-size:11px; font-weight:700; height:20px; justify-content:center; width:20px; }
+      .review-block p { color:#4a586d; font-size:11px; line-height:1.4; margin:0; }
+      .use-label { color:var(--ink); font-size:11px; font-weight:700; letter-spacing:.1em; margin:18px 0 9px; text-transform:uppercase; }
+      ul { color:#3e4d63; font-size:13px; line-height:1.42; list-style:none; margin:0; padding:0; }
+      li { align-items:flex-start; border-top:1px solid #edf1f6; display:flex; gap:7px; justify-content:space-between; margin:0; padding:9px 0; }
+      li::before { color:var(--accent); content:"+"; font-weight:700; }
+      .action-text { flex:1; }
+      .action-tool { background:color-mix(in srgb, var(--accent) 10%, white); border:1px solid color-mix(in srgb, var(--accent) 32%, white); color:var(--accent); flex:0 0 auto; font-size:9px; font-weight:700; line-height:1; margin-top:2px; padding:5px 6px; white-space:nowrap; }
+      .output { background:var(--accent); color:#fff; font-size:12px; font-weight:700; margin:0 -18px -18px; padding:14px 18px; }
+      .output small { display:block; font-size:9px; letter-spacing:.11em; margin-bottom:4px; opacity:.78; }
+      .principle { background:var(--ink); color:#fff; display:grid; gap:26px; grid-template-columns:auto 1fr; margin-top:42px; padding:24px 28px; }
+      .principle-mark { color:#9fe870; font-family:Georgia, serif; font-size:56px; line-height:.7; }
+      .principle h3 { font-size:18px; letter-spacing:-.02em; margin:0 0 7px; }
+      .principle p { color:#c8d2df; font-size:14px; line-height:1.45; margin:0; }
+      .bottom-grid { display:grid; gap:15px; grid-template-columns:1fr 1fr; margin-top:15px; }
+      .bottom-card { background:#fff; border:1px solid var(--line); padding:22px; }
+      .bottom-card h3 { font-size:18px; letter-spacing:-.03em; margin:0 0 12px; }
+      .metric-list, .guardrail-list { display:grid; gap:8px; margin:0; padding:0; }
+      .metric-list li, .guardrail-list li { border:0; color:#46566c; font-size:13px; justify-content:flex-start; padding:0; text-align:left; }
+      .metric-list li::before { color:#008c95; content:"↗"; }.guardrail-list li::before { color:#d9485f; content:"✓"; }
+      .footer { color:var(--muted); display:flex; font-size:12px; justify-content:space-between; margin-top:25px; }
+      @media (max-width:1180px) { .journey { grid-template-columns:repeat(3,1fr); }.journey::before { display:none; } }
+      @media (max-width:780px) { .journey { grid-template-columns:repeat(2,1fr); } }
+      @media (max-width:600px) { .page { padding-top:38px; }.journey { grid-template-columns:1fr; }.stage { min-height:auto; }.summary { min-height:0; }.bottom-grid { grid-template-columns:1fr; }.footer { gap:8px; flex-direction:column; } }
+      @media print { body { background:#fff; }.page { max-width:none; padding:28px; }.stage { box-shadow:none; }.principle { break-inside:avoid; } }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <p class="eyebrow">AI Tools in the Design Process</p>
+      <h1>From customer signal<br />to <span>design action.</span></h1>
+      <p class="intro">A practical view of where AI can accelerate the design workflow, while designers stay accountable for evidence, decisions, and experience quality.</p>
+
+      <div class="legend" aria-label="Tools used">
+        <span class="legend-label">Tools in play</span>
+        <span class="pill bob">Bob skills: Design Buddy, Helios, HDS, Experience Assurance</span>
+        <span class="pill copilot">Copilot</span>
+        <span class="pill figma">Figma Make</span>
+        <span class="pill ibm">IBM PPT</span>
+        <span class="pill ibm">Experience Assurance</span>
+      </div>
+
+      <section class="journey" aria-label="Four stages of the design process">
+        <article class="stage discovery">
+          <div class="stage-number">01</div>
+          <p class="stage-label">Discovery</p>
+          <h2>Find the signal</h2>
+          <p class="summary">Build a shared understanding of customer context before the team commits to a problem.</p>
+          <div class="tool-row"><span class="tool">Bob</span><span class="tool skill">Bob skill: Design Buddy</span><span class="tool">Copilot</span><span class="tool">IBM PPT</span></div>
+          <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Call notes</span><span>Transcripts</span><span>Product signals</span><span>Existing documents</span></div></div>
+          <p class="use-label">AI helps you</p>
+          <ul>
+            <li><span class="action-text">Draft early customer-call questionnaires.<span class="capability">Draft</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Understand product signals.<span class="capability">Analyze</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Turn customer calls into insights with transcripts.<span class="capability">Synthesize</span></span><span class="action-tool">Bob skill: Design Buddy</span></li>
+            <li><span class="action-text">Create a presentation of findings.<span class="capability">Present</span></span><span class="action-tool">IBM PPT</span></li>
+            <li><span class="action-text">Analyze broad documents and form an initial synthesis.<span class="capability">Analyze</span></span><span class="action-tool">Copilot</span></li>
+          </ul>
+          <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Summarize these five calls into recurring pain points, with supporting quotes.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Designer validates:</strong> the problem framing, evidence quality, and which signals matter.</p></div><div class="output"><small>DELIVERABLE</small>One-page problem frame with customer evidence</div></div>
+        </article>
+
+        <article class="stage research">
+          <div class="stage-number">02</div>
+          <p class="stage-label">Research</p>
+          <h2>Make evidence usable</h2>
+          <p class="summary">Plan studies, gather feedback, and turn raw research into traceable, evidence-led insight.</p>
+          <div class="tool-row"><span class="tool">Bob</span></div>
+          <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Research brief</span><span>Interview notes</span><span>Survey data</span><span>Prototype</span></div></div>
+          <p class="use-label">AI helps you</p>
+          <ul>
+            <li><span class="action-text">Draft research plans, study guides, recruitment criteria, and questionnaires.<span class="capability">Draft</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Create early concept-test scenarios and neutral interview questions.<span class="capability">Draft</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Synthesize transcripts, survey responses, usability notes, and feedback.<span class="capability">Synthesize</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Keep direct participant quotes and source links connected to insights.<span class="capability">Trace</span></span><span class="action-tool">Bob</span></li>
+          </ul>
+          <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Create neutral interview questions for this concept test, avoiding leading language.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Designer validates:</strong> themes against direct quotes and contradictory participant signals.</p></div><div class="output"><small>DELIVERABLE</small>Insight summary with evidence links</div></div>
+        </article>
+
+        <article class="stage define">
+          <div class="stage-number">03</div>
+          <p class="stage-label">Define</p>
+          <h2>Turn insight into inputs</h2>
+          <p class="summary">Connect validated customer evidence to product requirements and the work design needs to do next.</p>
+          <div class="tool-row"><span class="tool">Bob</span><span class="tool">Copilot</span></div>
+          <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Research synthesis</span><span>PRD or RFC</span><span>Customer evidence</span><span>Constraints</span></div></div>
+          <p class="use-label">AI helps you</p>
+          <ul>
+            <li><span class="action-text">Translate insights into inputs for the PRD.<span class="capability">Translate</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Translate a PRD or RFC into actionable design inputs.<span class="capability">Translate</span></span><span class="action-tool">Bob + Copilot</span></li>
+            <li><span class="action-text">Expose open questions and dependencies before design work begins.<span class="capability">Analyze</span></span><span class="action-tool">Bob + Copilot</span></li>
+          </ul>
+          <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Turn this PRD into primary flows, design tasks, assumptions, and open questions.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Team validates:</strong> scope, priority, dependencies, and the design direction.</p></div><div class="output"><small>DELIVERABLE</small>Annotated design brief and action plan</div></div>
+        </article>
+
+        <article class="stage design">
+          <div class="stage-number">04</div>
+          <p class="stage-label">Design</p>
+          <h2>Explore, then iterate</h2>
+          <p class="summary">Generate early directions faster, then make deliberate, editable design decisions in the tools designers use.</p>
+          <div class="tool-row"><span class="tool">Bob</span><span class="tool skill">Bob skill: Helios</span><span class="tool skill">Bob skill: HDS</span><span class="tool">Figma Make</span></div>
+          <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Design brief</span><span>HDS patterns</span><span>User flows</span><span>Engineering constraints</span></div></div>
+          <p class="use-label">AI helps you</p>
+          <ul>
+            <li><span class="action-text">Generate early design explorations and ideation.<span class="capability">Generate</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Make designer-friendly changes with layers, components, versions, and reversions.<span class="capability">Iterate</span></span><span class="action-tool">Figma Make</span></li>
+            <li><span class="action-text">Move work from Figma Make into Figma designs for faster iteration.<span class="capability">Iterate</span></span><span class="action-tool">Figma Make</span></li>
+            <li><span class="action-text">Use HDS patterns to keep explorations system-aware.<span class="capability">Align</span></span><span class="action-tool">Bob skill: HDS</span></li>
+            <li><span class="action-text">Translate engineering requirements into feasibility conversations.<span class="capability">Translate</span></span><span class="action-tool">Bob skill: Helios</span></li>
+          </ul>
+          <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Generate three approaches for this flow, including key edge states and trade-offs.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Designer validates:</strong> the chosen direction, interaction quality, and fidelity to intent.</p></div><div class="output"><small>DELIVERABLE</small>Editable Figma explorations ready to iterate</div></div>
+        </article>
+
+        <article class="stage testing">
+          <div class="stage-number">05</div>
+          <p class="stage-label">Testing</p>
+          <h2>Pressure-test the experience</h2>
+          <p class="summary">Test the proposed experience with users, then inspect implementation for accessibility, system alignment, and experience risks.</p>
+          <div class="tool-row"><span class="tool skill">Bob skill: Experience Assurance</span><span class="tool">Bob</span></div>
+          <div class="input-block"><p class="section-label">Provide</p><div class="input-tags"><span>Prototype</span><span>Study plan</span><span>Implementation</span><span>System rules</span></div></div>
+          <p class="use-label">AI helps you</p>
+          <ul>
+            <li><span class="action-text">Draft task-based study scripts, moderator guides, and scenario variations.<span class="capability">Draft</span></span><span class="action-tool">Bob</span></li>
+            <li><span class="action-text">Inspect system alignment, semantic structure, keyboard patterns, and accessibility risks.<span class="capability">Inspect</span></span><span class="action-tool">Bob skill: Experience Assurance</span></li>
+            <li><span class="action-text">Classify findings as fact, inference, recommendation, or human decision.<span class="capability">Classify</span></span><span class="action-tool">Bob skill: Experience Assurance</span></li>
+            <li><span class="action-text">Re-scan after approved changes to verify experience health improves.<span class="capability">Verify</span></span><span class="action-tool">Bob skill: Experience Assurance</span></li>
+          </ul>
+          <div class="stage-footer"><div class="prompt-block"><p class="section-label">Example prompt</p><p>“Run an Experience Assurance scan and separate findings into fact, inference, recommendation, and human decision.”</p></div><div class="review-block"><div class="review-mark">✓</div><p><strong>Team validates:</strong> evidence, exceptions, and which remediation to approve.</p></div><div class="output"><small>DELIVERABLE</small>User-study guide, prioritized findings, and approval-ready remediation</div></div>
+        </article>
+      </section>
+
+      <aside class="principle">
+        <div class="principle-mark">+</div>
+        <div><h3>Human judgment is the constant across every stage.</h3><p>AI can organize, draft, synthesize, and accelerate. Designers evaluate evidence, protect participant context, choose the right problem, and make the final experience decisions.</p></div>
+      </aside>
+      <section class="bottom-grid" aria-label="Impact metrics and responsible use">
+        <article class="bottom-card"><p class="eyebrow">Expected Impact</p><h3>What to measure</h3><ul class="metric-list"><li>Time to first research-plan or questionnaire draft</li><li>Time from raw feedback to evidence-backed synthesis</li><li>Requirements and dependencies surfaced before design starts</li><li>Number of viable concepts explored before commitment</li></ul></article>
+        <article class="bottom-card"><p class="eyebrow">Responsible Use</p><h3>Guardrails</h3><ul class="guardrail-list"><li>Preserve participant quotes and source links.</li><li>Do not treat AI summaries as evidence without human review.</li><li>Use only approved tools for sensitive customer information.</li><li>Keep final product and experience decisions human-owned.</li></ul></article>
+      </section>
+      <footer class="footer"><span>AI usage across the design process</span><span>Discovery → Research → Define → Design → Testing</span></footer>
+    </main>
+  </body>
+</html>
